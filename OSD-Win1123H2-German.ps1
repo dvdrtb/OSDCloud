@@ -57,24 +57,25 @@ $UnattendXml = @'
             <RunSynchronous>
                 <RunSynchronousCommand wcm:action="add">
                     <Order>1</Order>
-                    <Description>Start PS session</Description>
-                    <Path>powershell.exe -NoL -ExecutionPolicy Bypass</Path>
+                    <Description>Start Autopilot Import & Assignment Process</Description>
+                    <Path>PowerShell -ExecutionPolicy Bypass C:\Windows\Setup\scripts\autopilot.ps1</Path>
                 </RunSynchronousCommand>
             </RunSynchronous>
         </component>
     </settings>
     <settings pass="oobeSystem">
         <component name="Microsoft-Windows-International-Core" processorArchitecture="amd64" publicKeyToken="31bf3856ad364e35" language="neutral" versionScope="nonSxS">
+            <TimeZone>Romance Standard Time</TimeZone>
             <InputLocale>de-DE</InputLocale>
             <SystemLocale>de-DE</SystemLocale>
             <UILanguage>de-DE</UILanguage>
             <UserLocale>de-DE</UserLocale>
+            <RegisteredOrganization>LenovoDev2</RegisteredOrganization>
+			<RegisteredOwner>IT Service Desk HH HQ</RegisteredOwner>
         </component>
     </settings>
 </unattend>
 '@ 
-# Get-OSDGather -Property IsWinPE
-Block-WinOS
 
 if (-NOT (Test-Path 'C:\Windows\Panther')) {
     New-Item -Path 'C:\Windows\Panther'-ItemType Directory -Force -ErrorAction Stop | Out-Null
