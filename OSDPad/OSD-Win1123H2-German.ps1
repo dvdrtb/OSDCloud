@@ -71,7 +71,7 @@ $UnattendXml = @'
             <UILanguage>de-DE</UILanguage>
             <UserLocale>de-DE</UserLocale>
             <RegisteredOrganization>LenovoDev2</RegisteredOrganization>
-	    <RegisteredOwner>IT Service Desk HH HQ</RegisteredOwner>
+	    <RegisteredOwner>IT Service Desk</RegisteredOwner>
         </component>
     </settings>
 </unattend>
