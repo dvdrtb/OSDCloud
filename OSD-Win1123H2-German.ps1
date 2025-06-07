@@ -6,10 +6,10 @@
     
 .NOTES
     Author      : David Rechtenbach
-    Version     : 1.0
+    Version     : 1.1
     Date        : 17.03.2025
     Last Update : XX.XX.XXXX
-    Changes     : 
+    Changes     : Edit UnattendXml
 
 .REQUIREMENTS
    To use this script you need a winpe image with osd cloud module
@@ -71,7 +71,7 @@ $UnattendXml = @'
             <UILanguage>de-DE</UILanguage>
             <UserLocale>de-DE</UserLocale>
             <RegisteredOrganization>LenovoDev2</RegisteredOrganization>
-			<RegisteredOwner>IT Service Desk HH HQ</RegisteredOwner>
+	    <RegisteredOwner>IT Service Desk HH HQ</RegisteredOwner>
         </component>
     </settings>
 </unattend>
