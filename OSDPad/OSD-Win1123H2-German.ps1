@@ -49,6 +49,7 @@ Start-OSDCloud @Params
 ################################################################ 
 # PostOS Generate UnattendXml
 ################################################################
+# Define the unattend.xml content as a here-string
 $UnattendXml = @'
 <?xml version="1.0" encoding="utf-8"?>
 <unattend xmlns="urn:schemas-microsoft-com:unattend">
@@ -58,33 +59,36 @@ $UnattendXml = @'
                 <RunSynchronousCommand wcm:action="add">
                     <Order>1</Order>
                     <Description>Start Autopilot Import & Assignment Process</Description>
-                    <Path>PowerShell -ExecutionPolicy Bypass C:\Windows\Setup\scripts\autopilot.ps1</Path>
+                    <Path>powershell.exe -ExecutionPolicy Bypass -File "C:\Windows\Setup\scripts\autopilot.ps1"</Path>
                 </RunSynchronousCommand>
             </RunSynchronous>
         </component>
     </settings>
+
     <settings pass="oobeSystem">
-        <component name="Microsoft-Windows-International-Core" processorArchitecture="amd64" publicKeyToken="31bf3856ad364e35" language="neutral" versionScope="nonSxS">
-            <TimeZone>Romance Standard Time</TimeZone>
+        <component name="Microsoft-Windows-International-Core" processorArchitecture="amd64" publicKeyToken="31bf3856ad364e35" language="neutral" versionScope="nonSxS" xmlns:wcm="http://schemas.microsoft.com/WMIConfig/2002/State" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
             <InputLocale>de-DE</InputLocale>
             <SystemLocale>de-DE</SystemLocale>
             <UILanguage>de-DE</UILanguage>
             <UserLocale>de-DE</UserLocale>
-            <RegisteredOrganization>LenovoDev2</RegisteredOrganization>
-	    <RegisteredOwner>IT Service Desk</RegisteredOwner>
+        </component>
+        <component name="Microsoft-Windows-Shell-Setup" processorArchitecture="amd64" publicKeyToken="31bf3856ad364e35" language="neutral" versionScope="nonSxS" xmlns:wcm="http://schemas.microsoft.com/WMIConfig/2002/State" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+            <TimeZone>W. Europe Standard Time</TimeZone>
         </component>
     </settings>
 </unattend>
-'@ 
+'@
 
-if (-NOT (Test-Path 'C:\Windows\Panther')) {
-    New-Item -Path 'C:\Windows\Panther'-ItemType Directory -Force -ErrorAction Stop | Out-Null
+# Ensure the Panther directory exists — required by Windows Setup
+if (-not (Test-Path 'C:\Windows\Panther')) {
+    New-Item -Path 'C:\Windows\Panther' -ItemType Directory -Force | Out-Null
 }
 
-$Panther = 'C:\Windows\Panther'
-$UnattendPath = "$Panther\Unattend.xml"
-$UnattendXml | Out-File -FilePath $UnattendPath -Encoding utf8 -Width 2000 -Force
+# Define the target path for Unattend.xml
+$UnattendPath = 'C:\Windows\Panther\Unattend.xml'
 
+# Write the unattend content to file in UTF-8 encoding
+$UnattendXml | Out-File -FilePath $UnattendPath -Encoding utf8 -Width 2000 -Force
 ################################################################ 
 # Restart PC
 ################################################################
