@@ -42,7 +42,7 @@ $Params = @{
     OSLanguage = "de-de"
     OSLicense = "Retail"
     ZTI = $True
-    Firmware = $False
+    Firmware = $True
 }
 Start-OSDCloud @Params
 
