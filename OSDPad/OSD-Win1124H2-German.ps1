@@ -1,6 +1,6 @@
 <#
 .SYNOPSIS
-    OSD-Cloud Win 11 23H2 Automation
+    OSD-Cloud Win 11 24H2 Automation
 
 .DESCRIPTION
     
