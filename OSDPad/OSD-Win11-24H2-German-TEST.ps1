@@ -15,17 +15,24 @@ Start-OSDCloud @Params
 ################################################################ 
 # Copy Import-Cert.ps1 and PFX to Target System
 ################################################################
-Write-Host -ForegroundColor Cyan "Copying certificate and import script to C:\OSDCloud\Scripts..."
+Write-Host -ForegroundColor Cyan "Copying certificate and import scripts to target system..."
+Start-Sleep -Seconds 2
 
 $source = "X:\OSDCloud\Config\Scripts"
 $target = "C:\OSDCloud\Scripts"
+$target1 = "C:\Windows\Setup\scripts"
 
 if (-not (Test-Path $target)) {
     New-Item -ItemType Directory -Path $target -Force | Out-Null
 }
 
-Copy-Item "$source\Import-Cert.ps1" -Destination $target -Force
+if (-not (Test-Path $target1)) {
+    New-Item -ItemType Directory -Path $target -Force | Out-Null
+}
+
+Copy-Item "$source\Import-Certificate.ps1" -Destination $target -Force
 Copy-Item "$source\OSDCloudRegistration.pfx" -Destination $target -Force
+Copy-Item "$source\Autopilot.ps1" -Destination $target1 -Recurse -Force
 
 Write-Host -ForegroundColor Green "Files copied successfully."
 
