@@ -13,7 +13,7 @@ $Params = @{
 Start-OSDCloud @Params
 
 ################################################################ 
-# Copy Import-Cert.ps1 and PFX to Target System
+# [PostOS] Copy Import-Certificate.ps1 and PFX to Target System
 ################################################################
 Write-Host -ForegroundColor Cyan "Copying certificate and import scripts to target system..."
 Start-Sleep -Seconds 2
@@ -35,6 +35,45 @@ Copy-Item "$source\OSDCloudRegistration.pfx" -Destination $target -Force
 Copy-Item "$source\Autopilot.ps1" -Destination $target1 -Recurse -Force
 
 Write-Host -ForegroundColor Green "Files copied successfully."
+
+################################################################
+#  [PostOS] AutopilotOOBE Configuration Staging
+################################################################
+Write-Host -ForegroundColor Green "Define Computername:"
+$Serial = Get-WmiObject Win32_bios | Select-Object -ExpandProperty SerialNumber
+$TargetComputername = $Serial.Substring(4,3)
+
+$AssignedComputerName = "Test-$TargetComputername"
+Write-Host -ForegroundColor Red $AssignedComputerName
+Write-Host ""
+
+Write-Host -ForegroundColor Green "Create C:\ProgramData\OSDeploy\OSDeploy.AutopilotOOBE.json"
+$AutopilotOOBEJson = @"
+{
+    "AssignedComputerName" : "$AssignedComputerName",
+    "AddToGroup":  "AADGroupX",
+    "Assign":  {
+                   "IsPresent":  true
+               },
+    "GroupTag":  "Test123",
+    "Hidden":  [
+                   "AddToGroup",
+                   "AssignedUser",
+                   "PostAction",
+                   "GroupTag",
+                   "Assign"
+               ],
+    "PostAction":  "Quit",
+    "Run":  "NetworkingWireless",
+    "Docs":  "https://google.com/",
+    "Title":  "Autopilot Manual Register"
+}
+"@
+
+If (!(Test-Path "C:\ProgramData\OSDeploy")) {
+    New-Item "C:\ProgramData\OSDeploy" -ItemType Directory -Force | Out-Null
+}
+$AutopilotOOBEJson | Out-File -FilePath "C:\ProgramData\OSDeploy\OSDeploy.AutopilotOOBE.json" -Encoding ascii -Force
 
 ################################################################ 
 # PostOS Generate UnattendXml
